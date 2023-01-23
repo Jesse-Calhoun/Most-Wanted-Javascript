@@ -219,7 +219,42 @@ function searchByTraits(people){
         })
         return searchResults
     }
-    console.log(searchResults);
+    else if (traitSearch[0] === 'height'){
+        let value = traitSearch[1];
+        people.map(function(person){
+            if (person.height === value){
+                searchResults.push(person);
+            }
+        })
+        return searchResults
+    }
+    else if (traitSearch[0] === 'weight'){
+        let value = traitSearch[1];
+        people.map(function(person){
+            if (person.weight === value){
+                searchResults.push(person);
+            }
+        })
+        return searchResults
+    }
+    else if (traitSearch[0] === 'eyeColor'){
+        let value = traitSearch[1];
+        people.map(function(person){
+            if (person.eyeColor === value){
+                searchResults.push(person);
+            }
+        })
+        return searchResults
+    }
+    else if (traitSearch[0] === 'occupation'){
+        let value = traitSearch[1];
+        people.map(function(person){
+            if (person.occupation === value){
+                searchResults.push(person);
+            }
+        })
+        return searchResults
+    }
 }
 
 
