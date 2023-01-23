@@ -140,6 +140,13 @@ function displayPeople(people) {
 function displayPerson(person) {
     let personInfo = `First Name: ${person.firstName}\n`;
     personInfo += `Last Name: ${person.lastName}\n`;
+    personInfo += `gender: ${person.gender}\n`;
+    personInfo += `dob: ${person.dob}\n`;
+    personInfo += `height: ${person.height}\n`;
+    personInfo += `weight: ${person.weight}\n`;
+    personInfo += `eyeColor: ${person.eyeColor}\n`;
+    personInfo += `occupation: ${person.occupation}\n`;
+
     //! TODO #1a: finish getting the rest of the information to display //////////////////////////////////////////
     alert(personInfo);
 }
@@ -184,3 +191,24 @@ function chars(input) {
 
 //////////////////////////////////////////* End Of Starter Code *//////////////////////////////////////////
 // Any additional functions can be written below this line 👇. Happy Coding! 😁
+
+function searchByTraits(people){
+    let traitSearch = promptFor('What trait would you like to search by?', chars).toLowerCase();
+    let searchResults = [];
+    let traitInput = people.map(function(person){
+        if (person.gender === 'male'){
+            searchResults.push(person)
+        }
+        else if (PromiseRejectionEvent.gender === 'female'){
+            searchResults.push(person)
+        }
+    })
+    return searchResults
+}
+
+
+function findPersonFamily(person, people){
+    let personFamily = `currentSpouse: ${person.currentSpouse}`
+
+    return personFamily
+}
