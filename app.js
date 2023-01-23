@@ -228,12 +228,27 @@ function searchByTraits(people){
 
 
 function findPersonFamily(person, people){
-    let currSpouse = people.filter(function(human) {
-             return person.currentSpouse === human.id
+    let currSpouses = people.filter(function(spouse) {
+             return person.currentSpouse === spouse.id
         })
+    let parents = people.filter(function(parent) {
+        for (let i = 0; i < person.parents.length; i++){
+            if (person.parents[i] === parent.id){
+                return true;
+            }
+        }
+    })
+    let displayFamily = 'Spouse: ';
     // let parents = person.parents;
-    
-
+    if (currSpouses.length > 0) {
+        displayFamily = ` ${currSpouses[0].firstName} ${currSpouses[0].lastName}\n`;
+    }
+    displayFamily += '\nParents: ';
+    if (parents.length > 0) {
+        for (let i = 0; i < parents.length; i++) {
+            displayFamily += `${parents[i].firstName} ${parents[i].lastName}\n`;
+        }
+    }
 
 
     
@@ -242,7 +257,7 @@ function findPersonFamily(person, people){
     //     return person.parents === human.id
     // })
 
-    return `Spouse: ${currSpouse.firstName} ${currSpouse.lastName}`;
+    return displayFamily;
 }
 
 
