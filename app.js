@@ -58,9 +58,14 @@ function mainMenu(person, people) {
         // Restarts app() from the very beginning
         return app(people);
     }
-    let displayOption = prompt(
-        `Found ${person[0].firstName} ${person[0].lastName}. Do you want to know their 'info', 'family', or 'descendants'?\nType the option you want or type 'restart' or 'quit'.`
-    );
+    else if (person[1]){
+        
+    }
+    else {
+        let displayOption = prompt(
+            `Found ${person[0].firstName} ${person[0].lastName}. Do you want to know their 'info', 'family', or 'descendants'?\nType the option you want or type 'restart' or 'quit'.`
+        );
+    }
     // Routes our application based on the user's input
     switch (displayOption) {
         case "info":
@@ -194,16 +199,27 @@ function chars(input) {
 
 function searchByTraits(people){
     let traitSearch = promptFor('What trait would you like to search by?', chars).toLowerCase();
+    traitSearch = traitSearch.split(" ");
     let searchResults = [];
-    let traitInput = people.map(function(person){
-        if (person.gender === 'male'){
-            searchResults.push(person)
-        }
-        else if (PromiseRejectionEvent.gender === 'female'){
-            searchResults.push(person)
-        }
-    })
-    return searchResults
+    if (traitSearch[0] === 'gender'){
+        let value = traitSearch[1];
+        people.map(function(person){
+            if (person.gender === value){
+                searchResults.push(person);
+            }
+        })
+        return searchResults
+    }
+    else if (traitSearch[0] === 'dob'){
+        let value = traitSearch[1];
+        people.map(function(person){
+            if (person.dob === value){
+                searchResults.push(person);
+            }
+        })
+        return searchResults
+    }
+    console.log(searchResults);
 }
 
 
