@@ -212,69 +212,50 @@ function chars(input) {
 //////////////////////////////////////////* End Of Starter Code *//////////////////////////////////////////
 // Any additional functions can be written below this line 👇. Happy Coding! 😁
 
+
 function searchByTraits(people){
+
     let traitSearch = promptFor('What trait would you like to search by?', chars).toLowerCase();
-    traitSearch = traitSearch.split(" ");
-    let searchResults = [];
-    if (traitSearch[0] === 'gender'){
-        let value = traitSearch[1];
-        people.map(function(person){
-            if (person.gender === value){
-                searchResults.push(person);
-            }
-        })
-        return searchResults
-    }
-    else if (traitSearch[0] === 'dob'){
-        let value = traitSearch[1];
-        people.map(function(person){
-            if (person.dob === value){
-                searchResults.push(person);
-            }
-        })
-        return searchResults
-    }
-    else if (traitSearch[0] === 'height'){
-        let value = traitSearch[1];
-        people.map(function(person){
-            if (person.height == value){
-                searchResults.push(person);
-            }
-        })
-        return searchResults
-    }
-    else if (traitSearch[0] === 'weight'){
-        let value = traitSearch[1];
-        people.map(function(person){
-            if (person.weight == value){
-                searchResults.push(person);
-            }
-        })
-        return searchResults
-    }
-    else if (traitSearch[0] === 'eyeColor'){
-        let value = traitSearch[1];
-        people.map(function(person){
-            if (person.eyeColor === value){
-                searchResults.push(person);
-            }
-        })
-        return searchResults
-    }
-    else if (traitSearch[0] === 'occupation'){
-        let value = traitSearch[1];
-        people.map(function(person){
-            if (person.occupation === value){
-                searchResults.push(person);
-            }
-        })
-        return searchResults
-    }
+
+    let [trait, value] = traitSearch.split(' ') // array destructuring
+
+    let searchResults = people.filter(function(person){
+        return person[trait] == value // comparison expressions produce a boolean
+    })
+
+    return searchResults
 }
 
 
 function findPersonFamily(person, people){
-    let personFamily = `currentSpouse: ${person.currentSpouse}`
+    let currSpouse = people.filter(function(human) {
+             return person.currentSpouse === human.id
+        })
+    // let parents = person.parents;
+    
 
-    return personFamily
+
+
+    
+    // let personFamily = `currentSpouse: ${person.currentSpouse}\n`;
+    // personFamily += people.filter(function(human) {
+    //     return person.parents === human.id
+    // })
+
+    return `Spouse: ${currSpouse.firstName} ${currSpouse.lastName}`;
 }
+
+
+// {
+//     "id": 878013758,
+//     "firstName": "Jill",
+//     "lastName": "Pafoy",
+//     "gender": "female",
+//     "dob": "2/8/1972",
+//     "height": 74,
+//     "weight": 118,
+//     "eyeColor": "brown",
+//     "occupation": "programmer",
+//     "parents": [401222887],
+//     "currentSpouse": 294874671
+// },
