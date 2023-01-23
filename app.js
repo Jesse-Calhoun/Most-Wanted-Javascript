@@ -59,45 +59,60 @@ function mainMenu(person, people) {
         return app(people);
     }
     else if (person[1]){
+        let displayOption = `The search returned multiple matches. Here are the potential matches:\n`;
+            for (let i = 0; i < person.length; i++){
+                displayOption += `${person[i].firstName} ${person[i].lastName}\n`;
+            }
+            displayOption += `Select 'Okay' to start new search or 'Cancel' to exit app.`;
+            if (confirm(displayOption)){
+                return app(people);
+            }
+            else {
+                return;
+            }
+        
         
     }
     else {
         let displayOption = prompt(
             `Found ${person[0].firstName} ${person[0].lastName}. Do you want to know their 'info', 'family', or 'descendants'?\nType the option you want or type 'restart' or 'quit'.`
-        );
+        )
+        switch (displayOption) {
+            case "info":
+                //! TODO #1: Utilize the displayPerson function //////////////////////////////////////////
+                // HINT: Look for a person-object stringifier utility function to help
+                let personInfo = displayPerson(person[0]);
+                alert(personInfo);
+                break;
+            case "family":
+                //! TODO #2: Declare a findPersonFamily function //////////////////////////////////////////
+                // HINT: Look for a people-collection stringifier utility function to help
+                let personFamily = findPersonFamily(person[0], people);
+                alert(personFamily);
+                break;
+            case "descendants":
+                //! TODO #3: Declare a findPersonDescendants function //////////////////////////////////////////
+                // HINT: Review recursion lecture + demo for bonus user story
+                let personDescendants = findPersonDescendants(person[0], people);
+                alert(personDescendants);
+                break;
+            case "restart":
+                // Restart app() from the very beginning
+                app(people);
+                break;
+            case "quit":
+                // Stop application execution
+                return;
+            default:
+                // Prompt user again. Another instance of recursion
+                return mainMenu(person, people);
+            }
+        
     }
     // Routes our application based on the user's input
-    switch (displayOption) {
-        case "info":
-            //! TODO #1: Utilize the displayPerson function //////////////////////////////////////////
-            // HINT: Look for a person-object stringifier utility function to help
-            let personInfo = displayPerson(person[0]);
-            alert(personInfo);
-            break;
-        case "family":
-            //! TODO #2: Declare a findPersonFamily function //////////////////////////////////////////
-            // HINT: Look for a people-collection stringifier utility function to help
-            let personFamily = findPersonFamily(person[0], people);
-            alert(personFamily);
-            break;
-        case "descendants":
-            //! TODO #3: Declare a findPersonDescendants function //////////////////////////////////////////
-            // HINT: Review recursion lecture + demo for bonus user story
-            let personDescendants = findPersonDescendants(person[0], people);
-            alert(personDescendants);
-            break;
-        case "restart":
-            // Restart app() from the very beginning
-            app(people);
-            break;
-        case "quit":
-            // Stop application execution
-            return;
-        default:
-            // Prompt user again. Another instance of recursion
-            return mainMenu(person, people);
+    
+
     }
-}
 // End of mainMenu()
 
 /**
@@ -222,7 +237,7 @@ function searchByTraits(people){
     else if (traitSearch[0] === 'height'){
         let value = traitSearch[1];
         people.map(function(person){
-            if (person.height === value){
+            if (person.height == value){
                 searchResults.push(person);
             }
         })
@@ -231,7 +246,7 @@ function searchByTraits(people){
     else if (traitSearch[0] === 'weight'){
         let value = traitSearch[1];
         people.map(function(person){
-            if (person.weight === value){
+            if (person.weight == value){
                 searchResults.push(person);
             }
         })
