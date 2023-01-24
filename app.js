@@ -1,6 +1,6 @@
 /*
-    Author: devCodeCamp
-    Description: Most Wanted Starter Code
+Author: devCodeCamp
+Description: Most Wanted Starter Code
 */
 //////////////////////////////////////////* Beginning Of Starter Code *//////////////////////////////////////////
 
@@ -14,7 +14,20 @@
  * It operates as the entry point for our entire application and allows
  * our user to decide whether to search by name or by traits.
  * @param {Array} people        A collection of person objects.
- */
+*/
+let defaultPerson={
+        "id": 0,
+        "firstName": "",
+        "lastName": "",
+        "gender": "",
+        "dob": "",
+        "height":0,
+        "weight":0,
+        "eyeColor": "",
+        "occupation": "",
+        "parents": [],
+        "currentSpouse":0 
+    }
 function app(people) {
     // promptFor() is a custom function defined below that helps us prompt and validate input more easily
     // Note that we are chaining the .toLowerCase() immediately after the promptFor returns its value
@@ -42,7 +55,6 @@ function app(people) {
     mainMenu(searchResults, people);
 }
 // End of app()
-
 /**
  * After finding a single person, we pass in the entire person-object that we found,
  * as well as the entire original dataset of people. We need people in order to find
@@ -50,7 +62,7 @@ function app(people) {
  * @param {Object[]} person     A singular object inside of an array.
  * @param {Array} people        A collection of person objects.
  * @returns {String}            The valid string input retrieved from the user.
- */
+*/
 function mainMenu(person, people) {
     // A check to verify a person was found via searchByName() or searchByTrait()
     if (!person[0]) {
@@ -59,7 +71,7 @@ function mainMenu(person, people) {
         return app(people);
     }
     else if (person[1]){
-        let display = displayPeople(person);
+        let display = displayResults(person);
         display += `Select 'Okay' to start new search or 'Cancel' to exit app.`;
         if (confirm(displayOption)){
             return app(people);
@@ -98,6 +110,7 @@ function mainMenu(person, people) {
                 return;
             default:
                 // Prompt user again. Another instance of recursion
+                alert('Invalid response please try.')
                 return mainMenu(person, people);
             }
         
@@ -161,7 +174,7 @@ function displayPerson(person) {
     personInfo += `occupation: ${person.occupation}\n`;
 
     //! TODO #1a: finish getting the rest of the information to display //////////////////////////////////////////
-    alert(personInfo);
+    return personInfo;
 }
 // End of displayPerson()
 
@@ -197,8 +210,20 @@ function yesNo(input) {
  * @param {String} input        A string.
  * @returns {Boolean}           Default validation -- no logic yet.
  */
-function chars(input) {
-    return true; // Default validation only
+function chars(input, people) {
+    let inputKeyWords = input.split(' ')
+    let peopleKeys = Object.keys(defaultPerson)
+    if(inputKeyWords.length === 2){; // Default validation only
+        if (peopleKeys.includes(inputKeyWords[0]) === false){
+            return app(people)
+        }
+        return input
+    }
+    else if (input === '' || inputKeyWords.length > 2){
+       alert('Invalid response, try again.')
+       return app(people);
+    }
+    return input
 }
 // End of chars()
 
@@ -216,21 +241,13 @@ function searchByTraits(people){
     let searchResults = people.filter(function(person){
         return person[trait] == value; // comparison expressions produce a boolean
     })
-    let display = displayPeople(searchResults);
+    let display = displayResults(searchResults);
     display += '\nSelect OK to filter more ';
     
     if (confirm(display)) {
         return searchByTraits(searchResults);
     }
 }
-
-
-// if (i> 0){
-//     searchResults = searchResults.filter(function(person){
-//         return person[trait] == value;
-//     })
-// }
-// else{
 
 
 function findPersonFamily(person, people){
@@ -293,24 +310,10 @@ function findPersonDescendants(person, people = []){
 }
 
 
-function displayPeople(people) {
+function displayResults(people) {
     let displayOption = `The search returned multiple matches. Here are the potential matches:\n`;
     for (let i = 0; i < people.length; i++){
         displayOption += `${people[i].firstName} ${people[i].lastName}\n`;
     }
     return displayOption;
 }
-    
-// {
-//     "id": 878013758,
-//     "firstName": "Jill",
-//     "lastName": "Pafoy",
-//     "gender": "female",
-//     "dob": "2/8/1972",
-//     "height": 74,
-//     "weight": 118,
-//     "eyeColor": "brown",
-//     "occupation": "programmer",
-//     "parents": [401222887],
-//     "currentSpouse": 294874671
-// },
