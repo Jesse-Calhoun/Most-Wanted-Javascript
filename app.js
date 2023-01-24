@@ -59,19 +59,12 @@ function mainMenu(person, people) {
         return app(people);
     }
     else if (person[1]){
-        let displayOption = `The search returned multiple matches. Here are the potential matches:\n`;
-            for (let i = 0; i < person.length; i++){
-                displayOption += `${person[i].firstName} ${person[i].lastName}\n`;
-            }
-            displayOption += `Select 'Okay' to start new search or 'Cancel' to exit app.`;
-            if (confirm(displayOption)){
-                return app(people);
-            }
-            else {
-                return;
-            }
-        
-        
+        let display = displayPeople(person);
+        display += `Select 'Okay' to start new search or 'Cancel' to exit app.`;
+        if (confirm(displayOption)){
+            return app(people);
+        }
+        return;
     }
     else {
         let displayOption = prompt(
@@ -214,23 +207,37 @@ function chars(input) {
 
 
 function searchByTraits(people){
-
-    let traitSearch = promptFor('What trait would you like to search by?', chars).toLowerCase();
+    // for (let i = 0; i < 5; i++){
+    let traitSearch = promptFor('What trait would you like to search by?', chars);
 
     let [trait, value] = traitSearch.split(' ') // array destructuring
+    
 
     let searchResults = people.filter(function(person){
-        return person[trait] == value // comparison expressions produce a boolean
+        return person[trait] == value; // comparison expressions produce a boolean
     })
-
-    return searchResults
+    let display = displayPeople(searchResults);
+    display += '\nSelect OK to filter more ';
+    
+    if (confirm(display)) {
+        return searchByTraits(searchResults);
+    }
 }
+
+
+// if (i> 0){
+//     searchResults = searchResults.filter(function(person){
+//         return person[trait] == value;
+//     })
+// }
+// else{
 
 
 function findPersonFamily(person, people){
     let currSpouses = people.filter(function(spouse) {
              return person.currentSpouse === spouse.id
         })
+
     let parents = people.filter(function(parent) {
         for (let i = 0; i < person.parents.length; i++){
             if (person.parents[i] === parent.id){
@@ -238,50 +245,38 @@ function findPersonFamily(person, people){
             }
         }
     })
-    let siblings = people.filter(function(person){
+
+    let siblings = people.filter(function(sibling){
         for (let i = 0; i < person.parents.length; i++){
-            people.filter(function(human){
-                if (human.parents[i] === person.id)
-                    return true
-            })
+            if (person.parents[i] === sibling.parents[i]) {
+                return true;
+            }
         }
     })
+
+
     let displayFamily = 'Spouse: \n';
     // let parents = person.parents;
     if (currSpouses.length > 0) {
-        displayFamily += ` ${currSpouses[0].firstName} ${currSpouses[0].lastName}\n`;
+        displayFamily += `- ${currSpouses[0].firstName} ${currSpouses[0].lastName}\n`;
     }
     displayFamily += 'Parents: \n';
     if (parents.length > 0) {
         for (let i = 0; i < parents.length; i++) {
-            displayFamily += `${parents[i].firstName} ${parents[i].lastName}\n`;
+            displayFamily += `- ${parents[i].firstName} ${parents[i].lastName}\n`;
         }
     }
-    displayFamily += '\nSiblings: '
+    displayFamily += 'Siblings: \n'
     if (siblings.length > 0){
         for (let i = 0; i < siblings.length; i++){
-            displayFamily += `${siblings[i].firstName} ${siblings[i].lastName}`
+            displayFamily += `- ${siblings[i].firstName} ${siblings[i].lastName}\n`;
         }
     }
-    // function findSiblings(parents = [0], people = []){
-    //     let displayDescendants = 'Descendats: \n'
-    //     for (let i = 0; i < parents.length; i++){
-    //         people.filter(function(person){
-    //             return person.parents === parents
-    //         })
-    //         displayDescendants += `${}`
-    //     }
-    // }
-    
-    
-    // let personFamily = `currentSpouse: ${person.currentSpouse}\n`;
-    // personFamily += people.filter(function(human) {
-        //     return person.parents === human.id
-        // })
         
         return displayFamily;
     }
-    
+
+
 function findPersonDescendants(person, people = []){
     let displayDescendants = 'Descendants: \n'
     let descendants =people.filter(function(human){
@@ -295,6 +290,15 @@ function findPersonDescendants(person, people = []){
         displayDescendants += `${descendants[i].firstName} ${descendants[i].lastName}\n`
     }
     return displayDescendants
+}
+
+
+function displayPeople(people) {
+    let displayOption = `The search returned multiple matches. Here are the potential matches:\n`;
+    for (let i = 0; i < people.length; i++){
+        displayOption += `${people[i].firstName} ${people[i].lastName}\n`;
+    }
+    return displayOption;
 }
     
 // {
