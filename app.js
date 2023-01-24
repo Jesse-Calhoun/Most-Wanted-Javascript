@@ -210,18 +210,30 @@ function yesNo(input) {
  * @param {String} input        A string.
  * @returns {Boolean}           Default validation -- no logic yet.
  */
-function chars(input, people) {
+function chars(input) {
     let inputKeyWords = input.split(' ')
     let peopleKeys = Object.keys(defaultPerson)
+    // let peopleValues = people.map(function(person){Object.values(person)})
     if(inputKeyWords.length === 2){; // Default validation only
         if (peopleKeys.includes(inputKeyWords[0]) === false){
-            return app(people)
+            alert('Invalid response, try again.');
+            return app(people);
         }
-        return input
+        return input;
     }
-    else if (input === '' || inputKeyWords.length > 2){
-       alert('Invalid response, try again.')
-       return app(people);
+    // peopleValues.includes(input) === false || 
+    else if (inputKeyWords.length > 2){
+        alert('Invalid response, try again.');
+        return app(people);
+    }
+    else if (inputKeyWords.length === 1){
+        for (let i = 0; i < people.length; i++){
+            if (people[i].firstName === input || people[i].lastName === input){
+                return input;
+            }
+        }
+        alert('Invalid response, try again');
+        return app(people);
     }
     return input
 }
@@ -241,10 +253,12 @@ function searchByTraits(people){
     let searchResults = people.filter(function(person){
         return person[trait] == value; // comparison expressions produce a boolean
     })
+
     let display = displayResults(searchResults);
     display += '\nSelect OK to filter more ';
     
     if (confirm(display)) {
+        // RECURSION!!!
         return searchByTraits(searchResults);
     }
 }
