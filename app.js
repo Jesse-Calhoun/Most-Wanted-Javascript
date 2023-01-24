@@ -238,29 +238,65 @@ function findPersonFamily(person, people){
             }
         }
     })
-    let displayFamily = 'Spouse: ';
+    let siblings = people.filter(function(person){
+        for (let i = 0; i < person.parents.length; i++){
+            people.filter(function(human){
+                if (human.parents[i] === person.id)
+                    return true
+            })
+        }
+    })
+    let displayFamily = 'Spouse: \n';
     // let parents = person.parents;
     if (currSpouses.length > 0) {
-        displayFamily = ` ${currSpouses[0].firstName} ${currSpouses[0].lastName}\n`;
+        displayFamily += ` ${currSpouses[0].firstName} ${currSpouses[0].lastName}\n`;
     }
-    displayFamily += '\nParents: ';
+    displayFamily += 'Parents: \n';
     if (parents.length > 0) {
         for (let i = 0; i < parents.length; i++) {
             displayFamily += `${parents[i].firstName} ${parents[i].lastName}\n`;
         }
     }
-
-
+    displayFamily += '\nSiblings: '
+    if (siblings.length > 0){
+        for (let i = 0; i < siblings.length; i++){
+            displayFamily += `${siblings[i].firstName} ${siblings[i].lastName}`
+        }
+    }
+    // function findSiblings(parents = [0], people = []){
+    //     let displayDescendants = 'Descendats: \n'
+    //     for (let i = 0; i < parents.length; i++){
+    //         people.filter(function(person){
+    //             return person.parents === parents
+    //         })
+    //         displayDescendants += `${}`
+    //     }
+    // }
+    
     
     // let personFamily = `currentSpouse: ${person.currentSpouse}\n`;
     // personFamily += people.filter(function(human) {
-    //     return person.parents === human.id
-    // })
-
-    return displayFamily;
+        //     return person.parents === human.id
+        // })
+        
+        return displayFamily;
+    }
+    
+function findPersonDescendants(person, people = []){
+    let displayDescendants = 'Descendants: \n'
+    let descendants =people.filter(function(human){
+        for (let i = 0; i < human.parents.length; i++){
+            if (human.parents[i] === person.id){
+                return true
+            }
+        }
+    })
+    for (let i = 0; i < descendants.length; i++){
+        displayDescendants += `${descendants[i].firstName} ${descendants[i].lastName}\n`
+    }
+    return displayDescendants
 }
-
-
+    
 // {
 //     "id": 878013758,
 //     "firstName": "Jill",
