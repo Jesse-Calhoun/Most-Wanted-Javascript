@@ -28,6 +28,11 @@ let defaultPerson={
         "parents": [],
         "currentSpouse":0 
     }
+
+let firstNames = ['Billy', 'Uma', 'Michael', 'Jon', 'Jack', 'Jen', 'Mister', 'Missez', 'Joy', 'Mader', 'Jill', 'Ralph', 'Jasmine', 'Annie', 'Dave', 'Amii', 'Hana', 'Regina', 'Eloise', 'Mattias', 'Ellen', 'Joey']
+
+let lastNames = ['Bob', 'Walkens', 'Pafoy', 'Potatoo', 'Madden']
+
 function app(people) {
     // promptFor() is a custom function defined below that helps us prompt and validate input more easily
     // Note that we are chaining the .toLowerCase() immediately after the promptFor returns its value
@@ -128,8 +133,8 @@ function mainMenu(person, people) {
  * @returns {Array}             An array containing the person-object (or empty array if no match)
  */
 function searchByName(people) {
-    let firstName = promptFor("What is the person's first name?", chars);
-    let lastName = promptFor("What is the person's last name?", chars);
+    let firstName = promptFor("What is the person's first name?", isFirstName);
+    let lastName = promptFor("What is the person's last name?", isLastName);
 
     // The foundPerson value will be of type Array. Recall that .filter() ALWAYS returns an array.
     let foundPerson = people.filter(function (person) {
@@ -186,10 +191,10 @@ function displayPerson(person) {
  * @param {Function} valid      A callback function used to validate basic user input.
  * @returns {String}            The valid string input retrieved from the user.
  */
-function promptFor(question, valid) {
+function promptFor(question, valid, people) {
     do {
         var response = prompt(question).trim();
-    } while (!response || !valid(response));
+    } while (!response || !valid(response, people));
     return response;
 }
 // End of promptFor()
@@ -210,32 +215,34 @@ function yesNo(input) {
  * @param {String} input        A string.
  * @returns {Boolean}           Default validation -- no logic yet.
  */
-function chars(input) {
+function chars(input, people) {
     let inputKeyWords = input.split(' ')
     let peopleKeys = Object.keys(defaultPerson)
-    // let peopleValues = people.map(function(person){Object.values(person)})
     if(inputKeyWords.length === 2){; // Default validation only
-        if (peopleKeys.includes(inputKeyWords[0]) === false){
-            alert('Invalid response, try again.');
-            return app(people);
+        if (peopleKeys.includes(inputKeyWords[0])){
+            return input;
         }
-        return input;
     }
-    // peopleValues.includes(input) === false || 
-    else if (inputKeyWords.length > 2){
+    alert('Invalid response, try again.');
+    return app(people);
+}
+
+
+function isFirstName(input, people) {
+        // peopleValues.includes(input) === false || 
+    if (firstNames.includes(input) === false){
         alert('Invalid response, try again.');
         return app(people);
     }
-    else if (inputKeyWords.length === 1){
-        for (let i = 0; i < people.length; i++){
-            if (people[i].firstName === input || people[i].lastName === input){
-                return input;
-            }
-        }
-        alert('Invalid response, try again');
+    return input;
+}
+
+function isLastName(input, people){
+    if (lastNames.includes(input) === false){
+        alert('Invalid response, try again.');
         return app(people);
     }
-    return input
+    return input;
 }
 // End of chars()
 
@@ -245,7 +252,7 @@ function chars(input) {
 
 function searchByTraits(people){
     // for (let i = 0; i < 5; i++){
-    let traitSearch = promptFor('What trait would you like to search by?', chars);
+    let traitSearch = promptFor('What trait would you like to search by?', chars, people);
 
     let [trait, value] = traitSearch.split(' ') // array destructuring
     
