@@ -231,7 +231,7 @@ function chars(input, people) {
             for (let i = 0; i < inputKeyWords.length; i++){
                 inputKeyWords[i] = inputKeyWords[i].split(' ');
                     if (peopleKeys.includes(inputKeyWords[i][0]) === false){
-                        alert('Invalid response, incorrect keywords, try again.');
+                        alert('Invalid response, incorrect keyword(s), try again.');
                         return app(people);
                     }
             }
@@ -266,7 +266,7 @@ function isLastName(input, people){
 function searchByTraits(people){
 
     let searchResults = people;
-    let traitSearch = promptFor('Please type in search criteria without spaces then value.\nSeperate keyword and trait by space, seperate multiple criteria by a colon.\nCan also select \'restart\' or \'quit\'.\n(example criteria search - eyeColor brown)\n(example multiple criteria search - gender male:eyeColor brown:weight 200', chars, people);
+    let traitSearch = promptFor('Please type in search criteria without spaces then value.\nSeperate keyword and trait by space, seperate multiple criteria by a colon.\nCan also select \'restart\' or \'quit\'.\n(example criteria search - eyeColor brown)\n(example multiple criteria search - gender male:eyeColor brown:weight 200)', chars, people);
 
     if (traitSearch === 'quit'){
         return;
@@ -291,24 +291,11 @@ function searchByTraits(people){
 
 
 function findPersonFamily(person, people){
-    // let parents = people.filter(function(parent) {
-    //     for (let i = 0; i < person.parents.length; i++){
-    //         if (person.parents[i] === parent.id){
-    //             return true;
-    //         }
-    //     }
-    // })
-
     let displayFamily = `This is ${person.firstName} ${person.lastName}'s family.\n`
     displayFamily += 'Spouse: \n';
     displayFamily += displaySpouse(person, people)
     displayFamily += 'Parents: \n';
     displayFamily += displayParents(person,people)
-    // if (parents.length > 0) {
-    //     for (let i = 0; i < parents.length; i++) {
-    //         displayFamily += `- ${parents[i].firstName} ${parents[i].lastName}\n`;
-    //     }
-    // }
     displayFamily += 'Siblings: \n'
     displayFamily += displaySiblings(person, people)
     return displayFamily;
@@ -316,7 +303,8 @@ function findPersonFamily(person, people){
 
 
 function findPersonDescendants(person, people = []){
-    let displayDescendants = 'Descendants: \n';
+    let displayDescendants = `This is ${person.firstName} ${person.lastName}'s descendants.\n`
+    displayDescendants = 'Descendants: \n';
     let descendants = people.filter(function(human){
         for (let i = 0; i < human.parents.length; i++){
             if (human.parents[i] === person.id){
@@ -367,11 +355,6 @@ function displayParents(person, people){
     }
     return displayParents
 }
-
-
-
-
-
 
 function displaySiblings(person, people){
     let displaySiblings = '';
