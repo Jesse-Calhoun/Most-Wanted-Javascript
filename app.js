@@ -75,14 +75,16 @@ function mainMenu(person, people) {
         // Restarts app() from the very beginning
         return app(people);
     }
+    // Checks if there are multiple people in the person variable
     else if (person[1]){
         let display = displayResults(person);
         display += `Select 'Okay' to start new search or 'Cancel' to exit app.`;
-        if (confirm(displayOption)){
+        if (confirm(display)){
             return app(people);
         }
         return;
     }
+    // Runs if 1 person is in the person variable
     else {
         let displayOption = prompt(
             `Found ${person[0].firstName} ${person[0].lastName}. Do you want to know their 'info', 'family', or 'descendants'?\nType the option you want or type 'restart' or 'quit'.`
@@ -216,20 +218,31 @@ function yesNo(input) {
  * @returns {Boolean}           Default validation -- no logic yet.
  */
 function chars(input, people) {
-    let inputKeyWords = input.split(' ')
+    let inputKeyWords = input.split(':')
     let peopleKeys = Object.keys(defaultPerson)
-    if(inputKeyWords.length === 2){; // Default validation only
-        if (peopleKeys.includes(inputKeyWords[0])){
-            return input;
-        }
+
+    if (input === 'quit'){
+        return input;
     }
-    alert('Invalid response, try again.');
+    else if (input === 'restart') {
+        return app(people);
+    }
+    else if(inputKeyWords.length < 6){;
+            for (let i = 0; i < inputKeyWords.length; i++){
+                inputKeyWords[i] = inputKeyWords[i].split(' ');
+                    if (peopleKeys.includes(inputKeyWords[i][0]) === false){
+                        alert('Invalid response, incorrect keywords, try again.');
+                        return app(people);
+                    }
+            }
+            return inputKeyWords;
+    }
+    alert('Invalid response, too many searches, try again.');
     return app(people);
 }
 
 
 function isFirstName(input, people) {
-        // peopleValues.includes(input) === false || 
     if (firstNames.includes(input) === false){
         alert('Invalid response, try again.');
         return app(people);
@@ -251,22 +264,28 @@ function isLastName(input, people){
 
 
 function searchByTraits(people){
-    // for (let i = 0; i < 5; i++){
-    let traitSearch = promptFor('What trait would you like to search by?', chars, people);
 
-    let [trait, value] = traitSearch.split(' ') // array destructuring
-    
+    let searchResults = people;
+    let traitSearch = promptFor('Please type in search criteria without spaces then value.\nSeperate keyword and trait by space, seperate multiple criteria by a colon.\nCan also select \'restart\' or \'quit\'.\n(example criteria search - eyeColor brown)\n(example multiple criteria search - gender male:eyeColor brown:weight 200', chars, people);
 
-    let searchResults = people.filter(function(person){
-        return person[trait] == value; // comparison expressions produce a boolean
-    })
+    if (traitSearch === 'quit'){
+        return;
+    }
+    else if (traitSearch === 'restart') {
+        return app(people);
+    }
+    else {
+            let traitSearches = traitSearch.split(':')
+            for (let i = 0; i < traitSearches.length; i++){
+                let [trait, value] = traitSearches[i].split(' ') // array destructuring
+            
+        
+                searchResults = searchResults.filter(function(person){
+                    return person[trait] == value; // comparison expressions produce a boolean
+                })
+            }
 
-    let display = displayResults(searchResults);
-    display += '\nSelect OK to filter more ';
-    
-    if (confirm(display)) {
-        // RECURSION!!!
-        return searchByTraits(searchResults);
+            return mainMenu(searchResults, people);
     }
 }
 
@@ -316,18 +335,21 @@ function findPersonFamily(person, people){
 
 
 function findPersonDescendants(person, people = []){
-    let displayDescendants = 'Descendants: \n'
-    let descendants =people.filter(function(human){
+    let displayDescendants = 'Descendants: \n';
+    let descendants = people.filter(function(human){
         for (let i = 0; i < human.parents.length; i++){
             if (human.parents[i] === person.id){
-                return true
+                return true;
             }
         }
     })
     for (let i = 0; i < descendants.length; i++){
-        displayDescendants += `${descendants[i].firstName} ${descendants[i].lastName}\n`
+        displayDescendants += `${descendants[i].firstName} ${descendants[i].lastName}\n`;
+        if (people.parents.includes(descendants[i])){
+            
+        }
     }
-    return displayDescendants
+    return displayDescendants;
 }
 
 
