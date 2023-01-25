@@ -291,47 +291,28 @@ function searchByTraits(people){
 
 
 function findPersonFamily(person, people){
-    let currSpouses = people.filter(function(spouse) {
-             return person.currentSpouse === spouse.id
-        })
+    // let parents = people.filter(function(parent) {
+    //     for (let i = 0; i < person.parents.length; i++){
+    //         if (person.parents[i] === parent.id){
+    //             return true;
+    //         }
+    //     }
+    // })
 
-    let parents = people.filter(function(parent) {
-        for (let i = 0; i < person.parents.length; i++){
-            if (person.parents[i] === parent.id){
-                return true;
-            }
-        }
-    })
-
-    let siblings = people.filter(function(sibling){
-        for (let i = 0; i < person.parents.length; i++){
-            if (person.parents[i] === sibling.parents[i]) {
-                return true;
-            }
-        }
-    })
-
-
-    let displayFamily = 'Spouse: \n';
-    // let parents = person.parents;
-    if (currSpouses.length > 0) {
-        displayFamily += `- ${currSpouses[0].firstName} ${currSpouses[0].lastName}\n`;
-    }
+    let displayFamily = `This is ${person.firstName} ${person.lastName}'s family.\n`
+    displayFamily += 'Spouse: \n';
+    displayFamily += displaySpouse(person, people)
     displayFamily += 'Parents: \n';
-    if (parents.length > 0) {
-        for (let i = 0; i < parents.length; i++) {
-            displayFamily += `- ${parents[i].firstName} ${parents[i].lastName}\n`;
-        }
-    }
+    displayFamily += displayParents(person,people)
+    // if (parents.length > 0) {
+    //     for (let i = 0; i < parents.length; i++) {
+    //         displayFamily += `- ${parents[i].firstName} ${parents[i].lastName}\n`;
+    //     }
+    // }
     displayFamily += 'Siblings: \n'
-    if (siblings.length > 0){
-        for (let i = 0; i < siblings.length; i++){
-            displayFamily += `- ${siblings[i].firstName} ${siblings[i].lastName}\n`;
-        }
-    }
-        
-        return displayFamily;
-    }
+    displayFamily += displaySiblings(person, people)
+    return displayFamily;
+}
 
 
 function findPersonDescendants(person, people = []){
@@ -345,9 +326,6 @@ function findPersonDescendants(person, people = []){
     })
     for (let i = 0; i < descendants.length; i++){
         displayDescendants += `${descendants[i].firstName} ${descendants[i].lastName}\n`;
-        if (people.parents.includes(descendants[i])){
-            
-        }
     }
     return displayDescendants;
 }
@@ -359,4 +337,55 @@ function displayResults(people) {
         displayOption += `${people[i].firstName} ${people[i].lastName}\n`;
     }
     return displayOption;
+}
+
+function displaySpouse(person,people){
+    let displayCurrentSpouse = '';
+    let currSpouses = people.filter(function(spouse) {
+        return person.currentSpouse === spouse.id
+    })
+    if (currSpouses.length > 0) {
+        displayCurrentSpouse += `- ${currSpouses[0].firstName} ${currSpouses[0].lastName}\n`;
+    }
+    return displayCurrentSpouse
+
+}
+
+function displayParents(person, people){
+    let displayParents = '';
+    let parents = people.filter(function(parent) {
+        for (let i = 0; i < person.parents.length; i++){
+            if (person.parents[i] === parent.id){
+                return true;
+            }
+        }
+    })
+    if (parents.length > 0) {
+        for (let i = 0; i < parents.length; i++) {
+            displayParents += `- ${parents[i].firstName} ${parents[i].lastName}\n`;
+        }
+    }
+    return displayParents
+}
+
+
+
+
+
+
+function displaySiblings(person, people){
+    let displaySiblings = '';
+    let siblings = people.filter(function(sibling){
+        for (let i = 0; i < person.parents.length; i++){
+            if (person.parents[i] === sibling.parents[i] && person.id !== sibling.id) {
+                return true;
+            }
+        }
+    })
+    if (siblings.length > 0){
+        for (let i = 0; i < siblings.length; i++){
+            displaySiblings += `- ${siblings[i].firstName} ${siblings[i].lastName}\n`;
+        }
+    }
+    return displaySiblings
 }
